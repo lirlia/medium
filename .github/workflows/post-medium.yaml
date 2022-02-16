@@ -25,14 +25,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: technote-space/get-diff-action@v5
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v15
         with:
-          FILES: |
+          files: |
             README.md
 
       - run: |
-          git branch
-          for filepath in "${{ env.GIT_DIFF }}"
+
+          for filepath in "${{ steps.changed-files.outputs.all_modified_files }}"
           do
             title=$(sed -re "s@articles/(.*)/README.md@\1@g" <<< $filepath)
             opt=(

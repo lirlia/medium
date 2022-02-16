@@ -24,6 +24,7 @@ jobs:
       - run: |
           apt update -y
           apt install -y git
+          cd medium
           git branch
           files=$(git diff --name-only main ${GITHUB_HEAD_REF} | grep README.md)
           for filepath in "$filegs"

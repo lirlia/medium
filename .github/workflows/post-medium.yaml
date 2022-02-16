@@ -1,8 +1,9 @@
 name: post-medium
 on:
-  push:
+  pull_request:
     branches:
       - main
+    types: [closed]
     paths:
       - 'articles/**/README.md'
 env:
@@ -10,6 +11,7 @@ env:
   PUBLICATION_ID: ${{ secrets.PUBLICATION_ID }}
 jobs:
   post-medium:
+    if: github.event.pull_request.merged == true
     name: post-medium
     runs-on: ubuntu-20.04
     container:
@@ -17,12 +19,9 @@ jobs:
     steps:
       # https://github.com/actions/checkout/releases/tag/v2.4.0 相当
       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
-      - uses: technote-space/get-diff-action@v6
-        with:
-          PATTERNS: |
-            README.md
       - run: |
-          for filepath in "$MATCHED_FILES"
+          files=$(git diff --name-only origin/main origin/${GITHUB_HEAD_REF} | grep README.md)
+          for filepath in "$files"
           do
             title=$(sed -re "s@articles/(.*)/README.md@\1@g" <<< $filepath)
             opt=(

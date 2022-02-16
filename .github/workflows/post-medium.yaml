@@ -24,10 +24,15 @@ jobs:
       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
         with:
           fetch-depth: 0
+
+      - uses: technote-space/get-diff-action@v5
+        with:
+          FILES: |
+            README.md
+
       - run: |
           git branch
-          files=$(git diff --name-only main ${GITHUB_HEAD_REF} | grep README.md)
-          for filepath in "$filegs"
+          for filepath in "${{ env.GIT_DIFF }}"
           do
             title=$(sed -re "s@articles/(.*)/README.md@\1@g" <<< $filepath)
             opt=(

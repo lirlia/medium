@@ -1,0 +1,36 @@
+name: post-medium
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'articles/**/README.md'
+env:
+  MEDIUM_TOKEN: ${{ secrets.MEDIUM_TOKEN }}
+  PUBLICATION_ID: ${{ secrets.PUBLICATION_ID }}
+jobs:
+  post-medium:
+    name: post-medium
+    runs-on: ubuntu-20.04
+    container:
+      image: ghcr.io/matsubara0507/mdium
+    steps:
+      # https://github.com/actions/checkout/releases/tag/v2.4.0 相当
+      - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
+      - uses: technote-space/get-diff-action@v6
+        with:
+          PATTERNS: |
+            articles/**/README.md
+      - run: |
+          for filepath in "$MATCHED_FILES"
+          do
+            title=$(sed -re "s@articles/(.*)/README.md@\1@g" <<< $filepath)
+            opt=(
+              --title="$title"
+              --gist="medium-snippet-"
+              --org="$PUBLICATION_ID"
+              --verbose
+            )
+            # https://github.com/matsubara0507/mdium
+            mdium "$filepath" ${opt[@]}
+          done

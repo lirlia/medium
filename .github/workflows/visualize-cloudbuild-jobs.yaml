@@ -1,0 +1,42 @@
+# cloud build job定義が変化したときに、ジョブのグラフ画像を作成してコミットします。
+name: Visualize cloudbuild job graph and commit
+on:
+  push:
+    branches:
+      - '**'        # matches every branch
+      - '!main'     # excludes main
+    paths:
+      - 'cloudbuild/**/*.yaml'
+
+env:
+  SEARCH_DIRECTORIES: cloudbuild  # カンマ区切り文字列で指定する
+  FILENAME_FIND_PATTERN: '*.yaml'
+
+jobs:
+  format:
+    runs-on: ubuntu-20.04
+    name: Visualize cloudbuild job graph and commit
+    steps:
+      - name: checkout
+      # https://github.com/actions/checkout/releases/tag/v2.4.0 相当
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
+        with:
+          # commit push時にcheck-all-ci-resultの対象にするために自前のTOKENを使う
+          token: '${{ secrets.DURIAN_BOT_GITHUB_TOKEN }}'
+
+      - name: Create png image for each cloudbuild.yaml
+        # https://github.com/gecko655/github-action-visualize-gcb-graph/releases/tag/v0.0.3 相当
+        uses: gecko655/github-action-visualize-gcb-graph@aba569609bb086c13f49f4685afaf259b5aca67b
+        with:
+          search-directories: '${{ env.SEARCH_DIRECTORIES }}'
+          filename-find-pattern: '${{ env.FILENAME_FIND_PATTERN }}'
+
+
+      - name: commit and push
+        # https://github.com/EndBug/add-and-commit/releases/tag/v7.4.0 相当
+        uses: EndBug/add-and-commit@d77762158d703e60c60cf5baa4de52697d1414a3
+        with:
+          message: "Visualize cloudbuild jobs by GitHub Action"
+          committer_name: "github-actions[bot]"
+          committer_email: "41898282+github-actions[bot]@users.noreply.github.com"
+          push: true

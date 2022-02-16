@@ -1,0 +1,48 @@
+# Terraform fmtが行われていない場合に自動で行いCommitを積みます
+name: Check terraform file formatting and format
+on:
+  push:
+    branches:
+      - '**'        # matches every branch
+      - '!main'     # excludes main
+    paths:
+      - '**.tf'
+      - '**.tfvars'
+      - '**.hcl'
+
+jobs:
+  format:
+    runs-on: ubuntu-20.04
+    name: Check terraform file are formatted correctly
+    steps:
+      - name: checkout
+      # https://github.com/actions/checkout/releases/tag/v2.4.0 相当
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
+        with:
+          # commit push時にcheck-all-ci-resultの対象にするために自前のTOKENを使う
+          token: '${{ secrets.DURIAN_BOT_GITHUB_TOKEN }}'
+
+      - name: terraform fmt
+        # https://github.com/dflPook/terraform-fmt/releases/tag/v1.19.0 相当
+        uses: dflook/terraform-fmt@7c115899440784213fa4bc56352616bfe0d80c3c
+        with:
+          path: terraform
+
+      # hcl ファイルのフォーマットを行う
+      - name: get Terragrunt version
+        run: |
+          TERRAGRUNT_VERSION=$(grep terragrunt .tool-versions | awk '{print $2}')
+          URL="https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64"
+
+          curl -Ls "$URL" -o /tmp/terragrunt
+          chmod +x /tmp/terragrunt
+          /tmp/terragrunt hclfmt
+
+      - name: commit and push
+        # https://github.com/EndBug/add-and-commit/releases/tag/v7.4.0 相当
+        uses: EndBug/add-and-commit@d77762158d703e60c60cf5baa4de52697d1414a3
+        with:
+          message: "style: terraform fmt by GitHub Action"
+          committer_name: "github-actions[bot]"
+          committer_email: "41898282+github-actions[bot]@users.noreply.github.com"
+          push: true

@@ -1,0 +1,212 @@
+# durian-server / dryade の image / master dataを更新するための
+# プルリクエストを作成するGitHubActionです
+name: create-pr-for-durian
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        type: choice
+        description: manifestを更新する環境を選んでください
+        options:
+        - staging
+      caution:
+        type: choice
+        description: 【注意】イメージタグまたはマスターデータのリビジョンの最低1箇所以上を入力してください
+        options:
+        - 理解した
+      image_durian_server:
+        required: false
+        description: durian-serverで使用するイメージタグ(例:304f7b5)を入力してください
+        default: ""
+      image_dryade:
+        required: false
+        description: dryadeで使用するイメージタグ(例:304f7b5)を入力してください
+        default: ""
+      helm_chart_durian_server:
+        required: false
+        description: durian-serverで使用するHelm Chartバージョン(例:1.0.0-304f7b5)を入力してください
+        default: ""
+      helm_chart_dryade:
+        required: false
+        description: dryadeで使用するHelm Chartバージョン(例:1.0.0-304f7b5)を入力してください
+        default: ""
+      master_data_revision:
+        required: false
+        description: "durian-server/dryadeで使用するマスターデータのリビジョン(例:main-xxx-xxx)を入力してください (注意: .dbは不要です)"
+        default: ""
+
+defaults:
+  run:
+    shell: bash
+jobs:
+  manifest-update:
+    name: Create PR of durian manifest updating
+    runs-on: ubuntu-20.04
+    env:
+      # 任意の文字列が入りうるフィールドは、Bashで直接使うとインジェクションの危険があるため、ENVに登録して使います
+      # https://securitylab.github.com/research/github-actions-untrusted-input/#remediation
+      TARGET: ${{ github.event.inputs.target }}
+      IMAGE_DURIAN: ${{ github.event.inputs.image_durian_server }}
+      IMAGE_DRYADE: ${{ github.event.inputs.image_dryade }}
+      HELM_CHART_DURIAN: ${{ github.event.inputs.helm_chart_durian_server }}
+      HELM_CHART_DRYADE: ${{ github.event.inputs.helm_chart_dryade }}
+      MASTER_DATA_REV: ${{ github.event.inputs.master_data_revision }}
+    steps:
+      - name: checkout
+      # https://github.com/actions/checkout/releases/tag/v2.4.0 相当
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: update manifest
+        id: update-manifest
+        run: |
+          set -x
+
+          # デバッグ用途
+          env
+
+          function prefail() {
+            echo "ERR_REASON=$1" >> $GITHUB_ENV
+            exit 1
+          }
+
+          ## ProjectIDの取得
+          case "$TARGET" in
+            "staging" )
+              MASTER_DATA_URL="game-contents.staging.durian.xflag.com"
+              PROJECT_ID=c-271-durian-dev ;;
+            * ) prefail "想定外の環境名(${TARGET})が使用されています" ;;
+          esac
+
+          ## Validationチェック
+          [ -z ${IMAGE_DURIAN} ] && \
+          [ -z ${IMAGE_DRYADE} ] && \
+          [ -z ${HELM_CHART_DURIAN} ] && \
+          [ -z ${HELM_CHART_DRYADE} ] && \
+          [ -z ${MASTER_DATA_REV} ] && \
+            prefail "イメージIDかHelm Chartのバージョンか、マスターデータのリビジョンのいずれかを入力してください"
+
+          [[ ${MASTER_DATA_REV} =~ '.*db$' ]] &&
+            prefail "マスターデータのリビジョン(${MASTER_DATA_REV})に.dbが含まれています"
+
+          ## catalogを使用してマスターデータの存在チェック(HTTP status code 200以外なら弾く)
+          if [ ${MASTER_DATA_REV} ]; then
+            http_status_code=$(curl -o /dev/null -w '%{http_code}\n' -s "https://${MASTER_DATA_URL}/masters/${MASTER_DATA_REV}.catalog.json")
+            [ "$http_status_code" -ne 200 ] && prefail "https://${MASTER_DATA_URL}/masters/${MASTER_DATA_REV}.catalog.json が存在していません"
+          fi
+
+          ## PRの本文の生成
+          cat <<EOF > /tmp/result
+          このPull RequestはGitHub Actionによって自動生成されています。
+
+          ## 変更内容
+
+          名前|値
+          --|--
+          プロジェクトID|${PROJECT_ID}
+          環境|${TARGET}
+          EOF
+
+          # download yq
+          wget https://github.com/mikefarah/yq/releases/download/v4.17.2/yq_linux_amd64 -O /usr/bin/yq &&\
+          chmod +x /usr/bin/yq
+
+          # 指定された yaml ファイル名の key の値を value に変換します
+          function updateYaml() {
+            local filename="$1"
+            local key="$2"
+            local value="$3"
+
+            # yq が使用している go の yaml library が yaml 内の空行を削除してしまうので
+            # 以下のリンクで紹介されているテクニックを使っています
+            # see: https://github.com/mikefarah/yq/issues/515#issuecomment-830380295
+            patch "$filename" <<< $(diff -U0 -w -b --ignore-blank-lines $filename <(yq eval "$key = \"$value\"" $filename))
+          }
+
+          #-------------------------------------------------------------------
+          # image update
+          #-------------------------------------------------------------------
+
+          function updateImage() {
+            local name=$1       # durian-server/dryade
+            local version=$2    # image version
+            updateYaml "manifests/$name/${TARGET}/values.yaml" ".${name}.api.image.tag" "$version"
+            echo "イメージ(${name})|[${version}](https://github.com/xflagstudio/durian-server/commit/${version}) <br> ([Container Registry](https://console.cloud.google.com/gcr/images/$PROJECT_ID/asia/${name}?project=$PROJECT_ID))" >> /tmp/result
+            echo "gcloud container images list-tags asia.gcr.io/$PROJECT_ID/${name} --filter=\"TAGS=${version}\"" >> /tmp/after_result
+          }
+
+          [ "$IMAGE_DURIAN" ] && updateImage durian-server "$IMAGE_DURIAN"
+          [ "$IMAGE_DRYADE" ] && updateImage dryade "$IMAGE_DRYADE"
+
+          #-------------------------------------------------------------------
+          # helm chart update
+          #-------------------------------------------------------------------
+
+          function updateHelm() {
+            local name=$1       # durian-server/dryade
+            local version=$2    # chart version
+            updateYaml "manifests/$name/${TARGET}/Chart.yaml" ".dependencies.[0].version" "$version"
+            echo "Helm Chart($name)|[$version](https://github.com/xflagstudio/durian-server/commit/${version##*-}) <br> ([Artifact Registry](https://console.cloud.google.com/artifacts/docker/${PROJECT_ID}/asia-northeast1/durian-helm/${name}?project=${PROJECT_ID}))" >> /tmp/result
+            echo "gcloud artifacts docker images describe asia-northeast1-docker.pkg.dev/$PROJECT_ID/durian-helm/${name}:${version}" >> /tmp/after_result
+          }
+
+          [ "$HELM_CHART_DURIAN" ] && updateHelm durian-server "$HELM_CHART_DURIAN"
+          [ "$HELM_CHART_DRYADE" ] && updateHelm dryade "$HELM_CHART_DRYADE"
+
+          #-------------------------------------------------------------------
+          # master data update
+          #-------------------------------------------------------------------
+
+          if [ "$MASTER_DATA_REV" ]; then
+            # yq だとどうしても空行が削除されてしまうので sed を使う
+            sed -i "s/^    revision: .*/    revision: ${MASTER_DATA_REV}/g" "manifests/durian-server/${TARGET}/values.yaml"
+            sed -i "s/^    revision: .*/    revision: ${MASTER_DATA_REV}/g" "manifests/dryade/${TARGET}/values.yaml"
+            MASTER_DATA_COMMIT_HASH=$(echo "$MASTER_DATA_REV" | sed -r "s/^.*-(.*)-.*$/\1/g")
+            echo "マスターデータ|[${MASTER_DATA_REV}](https://github.com/xflagstudio/durian-master-data/commit/${MASTER_DATA_COMMIT_HASH}) <br> ([Cloud Storage](https://console.cloud.google.com/storage/browser/_details/${PROJECT_ID}-${TARGET}-master-data-server/masters/${MASTER_DATA_REV}.db))" >> /tmp/result
+            echo "gsutil ls gs://${PROJECT_ID}-${TARGET}-master-data-server/masters/${MASTER_DATA_REV}.db" >> /tmp/after_result
+          fi
+
+          cat <<EOF >> /tmp/result
+
+          ## ファイルの存在確認コマンド
+
+          <pre><code>$(cat /tmp/after_result)
+          </code></pre>
+
+          EOF
+
+          echo "PR_BODY<<EOF" >> $GITHUB_ENV
+          echo "$(cat /tmp/result)" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: debug
+        run: |
+          echo '${{ env.PR_BODY }}'
+
+      - name: create pull request
+        # https://github.com/peter-evans/create-pull-request/releases/tag/v3.11.0 相当
+        uses: peter-evans/create-pull-request@67df31e08a133c6a77008b89689677067fef169e
+        with:
+          # push時にcheck-all-ci-resultの対象にするために自前のTOKENを使う
+          token: '${{ secrets.DURIAN_BOT_GITHUB_TOKEN }}'
+          commit-message: "feat: Update durian manifest by GitHub Action"
+          committer: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          delete-branch: true
+          branch: create-pull-request/update-manifest
+          branch-suffix: random
+          title: '[${{ github.event.inputs.target }}環境] durian-server/dryade manifest更新 (generated by GitHub Action)'
+          body: ${{ env.PR_BODY }}
+
+      # テスト失敗時はこちらのステップが実行される
+      - name: Slack Notification on Failure
+        # https://github.com/rtCamp/action-slack-notify/releases/tag/v2.2.0 相当
+        uses: rtCamp/action-slack-notify@12e36fc18b0689399306c2e0b3e0f2978b7f1ee7
+        if: failure()
+        env:
+          SLACK_CHANNEL: durian_server
+          SLACK_TITLE: Manifestの生成に失敗しました
+          SLACK_MESSAGE: ${{ env.ERR_REASON }}
+          SLACK_COLOR: danger
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_DURIAN_SERVER }}

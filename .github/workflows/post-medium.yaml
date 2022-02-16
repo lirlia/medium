@@ -20,7 +20,7 @@ jobs:
       - uses: technote-space/get-diff-action@v6
         with:
           PATTERNS: |
-            articles/**/README.md
+            README.md
       - run: |
           for filepath in "$MATCHED_FILES"
           do

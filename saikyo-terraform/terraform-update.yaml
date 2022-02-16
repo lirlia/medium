@@ -1,0 +1,110 @@
+# Terraform 関連ツールの自動アップデートをする PR を作成します
+name: update-terraform
+on:
+  # スケジュール実行
+  schedule:
+    # *はYAMLにおける特殊文字なので、この文字列はクオートしなければならない
+    # UTC でしか現在設定できないので JST は+9時間する
+    - cron:  '0 0 * * *'
+
+  # 手動で実行したいとき
+  workflow_dispatch: {}
+
+defaults:
+  run:
+    shell: bash
+jobs:
+  update-terraform:
+    name: Create PR of updating terraform
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+      # https://github.com/actions/checkout/releases/tag/v2.4.0 相当
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
+
+      - name: update terraform tools
+        run: |
+
+          set -x
+
+          #-----------------------------------------------------------------------------------------
+          # install asdf for get latest tool version
+          #-----------------------------------------------------------------------------------------
+          # see: http://asdf-vm.com/guide/getting-started.html#_1-install-dependencies
+          sudo apt-get install -y curl git unzip
+          git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.9.0
+          . $HOME/.asdf/asdf.sh
+
+          #-----------------------------------------------------------------------------------------
+          # get latest terraform and terragrunt
+          #-----------------------------------------------------------------------------------------
+          install-latest() {
+            local name=$1
+            asdf plugin-add "$name"
+            asdf install "$name" latest
+            asdf local "$name" latest
+          }
+
+          install-latest terraform
+          install-latest terragrunt
+
+          #-----------------------------------------------------------------------------------------
+          # get latest terraform providers
+          #-----------------------------------------------------------------------------------------
+          hcl_file="./terraform/live/terragrunt.hcl"
+
+          ## 変数名から namespace/provider_name を生成し、配列に格納する
+          ## 例: hashicorp/google-beta
+          providers=($(sed -nr "s/ *provider_(.*)_(.*) *=.*/\1\/\2/p" "$hcl_file"))
+
+          ## それぞれの最新の provider 情報を取得しファイルを更新する
+          ## see: https://www.terraform.io/internals/provider-registry-protocol#service-discovery
+          for p in ${providers[@]}
+          do
+            url="https://registry.terraform.io/v1/providers/${p}"
+
+            # 最新バージョンを取得する
+            v=$(curl -sL "${url}" | jq -r '.version')
+
+            # GitHub Releases URL を格納する
+            echo "- [$p]($(echo $(curl -sL ${url} | jq -r '.source')/releases))" >> result
+
+            # provider_$p = "x.x.x" を provider_$p = "$v" に書き換えて保存する
+            sed -i -r "s/(^ *provider_${p//\//_}) *=.*$/\1=\"${v}\"/g" "$hcl_file"
+          done
+
+          ## 環境変数に各 Provider の GitHub Release の URL を渡す
+          echo "RELEASE_URL_BODY<<EOF" >> $GITHUB_ENV
+          echo "$(cat result)" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          rm -rf result
+
+          #-----------------------------------------------------------------------------------------
+          # format terragrunt file
+          #-----------------------------------------------------------------------------------------
+          terragrunt hclfmt
+
+      - name: create pull request
+        # https://github.com/peter-evans/create-pull-request/releases/tag/v3.11.0 相当
+        uses: peter-evans/create-pull-request@67df31e08a133c6a77008b89689677067fef169e
+        with:
+          commit-message: "feat: Update terraform tools by GitHub Action"
+          committer: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          branch: create-pull-request/update-terraform
+          delete-branch: true
+          title: '[自動作成] Terraform 関連ツールの自動更新'
+          body: |
+            この Pull Request は GitHub Actions によって自動作成されています。
+
+            ## ツール
+
+            - Terraform
+              - [Releases · hashicorp/terraform](https://github.com/hashicorp/terraform/releases)
+              - [Upgrade Guides | Terraform by HashiCorp](https://www.terraform.io/language/upgrade-guides)
+            - Terragrunt
+              - [Releases · gruntwork-io/terragrunt](https://github.com/gruntwork-io/terragrunt/releases)
+
+            ## Provider
+
+            ${{ env.RELEASE_URL_BODY }}

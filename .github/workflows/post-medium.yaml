@@ -2,8 +2,8 @@ name: post-medium
 on:
   workflow_dispatch:
     inputs:
-      article_date:
-        description: articles/xxxxx の xxxx を入力してください
+      article_path:
+        description: articles/xxxxx 形式で入力してください
         required: true
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
     env:
       MEDIUM_TOKEN: ${{ secrets.MEDIUM_TOKEN }}
       PUBLICATION_ID: ${{ secrets.PUBLICATION_ID }}
-      ARTICLE_DATE: ${{ github.event.input.article_date }}
+      ARTICLE_PATH: ${{ github.event.inputs.article_path }}
     steps:
       # https://github.com/actions/checkout/releases/tag/v2.4.0 相当
       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
@@ -25,10 +25,10 @@ jobs:
 
           set -x
           opt=(
-            --title=$(cat articles/${ARTICLE_DATE}/title)
+            --title=$(cat ${ARTICLE_PATH}/title)
             --gist="medium-snippet-"
             --org="$PUBLICATION_ID"
             --verbose
           )
           # https://github.com/matsubara0507/mdium
-          mdium articles/${ARTICLE_DATE}/README.md ${opt[@]}
+          mdium ${ARTICLE_PATH}/README.md ${opt[@]}

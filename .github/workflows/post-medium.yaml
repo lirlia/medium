@@ -1,48 +1,31 @@
 name: post-medium
 on:
-  pull_request:
-    branches:
-      - main
-    types: [closed]
-    paths:
-      - 'articles/**/README.md'
-env:
-  MEDIUM_TOKEN: ${{ secrets.MEDIUM_TOKEN }}
-  PUBLICATION_ID: ${{ secrets.PUBLICATION_ID }}
+  workflow_dispatch:
+    inputs:
+      article_date:
+        description: articles/xxxxx の xxxx を入力してください
+        required: true
+
 jobs:
   post-medium:
-    if: github.event.pull_request.merged == true
     name: post-medium
     runs-on: ubuntu-20.04
     container:
       image: ghcr.io/matsubara0507/mdium
+    env:
+      MEDIUM_TOKEN: ${{ secrets.MEDIUM_TOKEN }}
+      PUBLICATION_ID: ${{ secrets.PUBLICATION_ID }}
+      ARTICLE_DATE: ${{ github.event.input.article_date }}
     steps:
-      - run: |
-          apt update -y
-          apt install -y git
       # https://github.com/actions/checkout/releases/tag/v2.4.0 相当
       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
-        with:
-          fetch-depth: 0
-
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v15
-        with:
-          files: |
-            README.md
-
       - run: |
 
-          for filepath in "${{ steps.changed-files.outputs.all_modified_files }}"
-          do
-            title=$(sed -re "s@articles/(.*)/README.md@\1@g" <<< $filepath)
-            opt=(
-              --title="$title"
-              --gist="medium-snippet-"
-              --org="$PUBLICATION_ID"
-              --verbose
-            )
-            # https://github.com/matsubara0507/mdium
-            mdium "$filepath" ${opt[@]}
-          done
+          opt=(
+            --title=$(cat articles/${ARTICLE_DATE}/title)
+            --gist="medium-snippet-"
+            --org="$PUBLICATION_ID"
+            --verbose
+          )
+          # https://github.com/matsubara0507/mdium
+          mdium articles/${ARTICLE_DATE}/README.md ${opt[@]}

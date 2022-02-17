@@ -24,11 +24,11 @@ jobs:
         run: |
 
           set -x
-          opt=(
-            --title=$(cat ${ARTICLE_PATH}/title)
+          opts=(
+            --title="$(cat ${ARTICLE_PATH}/title)"
             --gist="medium-snippet-"
             --org="$PUBLICATION_ID"
             --verbose
           )
           # https://github.com/matsubara0507/mdium
-          mdium ${ARTICLE_PATH}/README.md ${opt[@]}
+          mdium "${ARTICLE_PATH}/README.md" ${opts[@]}

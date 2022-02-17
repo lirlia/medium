@@ -25,8 +25,12 @@ jobs:
         run: |
 
           set -x
+
+          # image url を更新
+          sed -ei "s@images@https://raw.githubusercontent.com/lirlia/medium/main/articles/template/images@g" "${ARTICLE_PATH}/README.md"
+
           opts=(
-            --title="$(cat ${ARTICLE_PATH}/title)"
+            --title="\"$(cat ${ARTICLE_PATH}/title)\""
             --gist="medium-snippet-"
             --org="$PUBLICATION_ID"
             --verbose

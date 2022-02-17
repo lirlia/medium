@@ -16,6 +16,7 @@ jobs:
       MEDIUM_TOKEN: ${{ secrets.MEDIUM_TOKEN }}
       PUBLICATION_ID: ${{ secrets.PUBLICATION_ID }}
       ARTICLE_PATH: ${{ github.event.inputs.article_path }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       # https://github.com/actions/checkout/releases/tag/v2.4.0 相当
       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579

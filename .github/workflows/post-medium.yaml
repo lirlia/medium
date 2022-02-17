@@ -19,8 +19,11 @@ jobs:
     steps:
       # https://github.com/actions/checkout/releases/tag/v2.4.0 相当
       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
-      - run: |
+      - name: post-article
+        shell: bash
+        run: |
 
+          set -x
           opt=(
             --title=$(cat articles/${ARTICLE_DATE}/title)
             --gist="medium-snippet-"

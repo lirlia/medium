@@ -6,11 +6,11 @@ GKE 使ってますか？
 
 私達のチームでは GKE を始めとするインフラリソースの管理を Terraform で行っています。
 
-![picture 17](images/8123cc7edaa6efbd3716aaf3b69d596138ea20a2e09377ebe24b3034afaee504.png)
+![picture 17](https://raw.githubusercontent.com/lirlia/medium/main/articles/202202-terraform-nodepool/images/8123cc7edaa6efbd3716aaf3b69d596138ea20a2e09377ebe24b3034afaee504.png)
 
 非常に便利なのですが、Terraform で NodePool の変更する時に内容によっては **「NodePool の削除 -> NodePool の作成 という順番で Terraform が動作してしまうこと**」に困っていました。
 
-![picture 18](images/f90988f965014fc58b774eaed6d6d36dd35595f3d665e47a40ccc03f6613e008.png)  
+![picture 18](https://raw.githubusercontent.com/lirlia/medium/main/articles/202202-terraform-nodepool/images/f90988f965014fc58b774eaed6d6d36dd35595f3d665e47a40ccc03f6613e008.png)  
 
 例えば NodePool のインスタンスタイプの変更作業を行った際に NodePool に存在するすべての Pod にアクセスができなくなってしまうのです。(Pod が nodeSelector や nodeAffinity で削除する NodePool でのみ動くことを想定しています)
 
@@ -26,7 +26,7 @@ GKE 使ってますか？
 1. 既存の NodePool を drain して 新しい NodePool に Pod を移動する
 1. 古い NodePool を削除する
 
-![picture 19](images/3b24bd372a18ddd4ec4588973c94cc9f2cb2b04481eac2dd61e39599cc9c292e.png)  
+![picture 19](https://raw.githubusercontent.com/lirlia/medium/main/articles/202202-terraform-nodepool/images/3b24bd372a18ddd4ec4588973c94cc9f2cb2b04481eac2dd61e39599cc9c292e.png)  
 
 これが**ひじょーーーーーに面倒**で、Pull Request ベースで Terraform コードを管理している我々の環境では、少なくとも2回のコード修正(NodePool の作成/削除)を行う必要がありますし、何より**手作業で kubectl cordon / kubectl drain コマンドを叩くところが辛い**です。
 
@@ -37,7 +37,7 @@ GKE 使ってますか？
 - [baozuo/terraform-google-gke-node-pool: A Terraform module to create GKE node pool featuring zero downtime during recreation](https://github.com/baozuo/terraform-google-gke-node-pool)
 
 ## terraform-google-gke-node-pool とは
-![picture 20](images/4bbf4d930fa146cb50b492d87781ea09e510b95dfea21f1ce44e4828b0b78c3e.png)
+![picture 20](https://raw.githubusercontent.com/lirlia/medium/main/articles/202202-terraform-nodepool/images/4bbf4d930fa146cb50b492d87781ea09e510b95dfea21f1ce44e4828b0b78c3e.png)
 
 この module を使うと Terraform のコードを修正するだけで **ダウンタイムなしで NodePool の更新**ができます。(`kubectl drain` 時にダウンタイムが発生しないように `PodDisruptionBudget` などが設定されていることが前提です)
 
@@ -63,7 +63,7 @@ module "nodepool" {
 
 ## module がやっていること
 
-![picture 21](images/326941769696ba33cf7dc73cffe2fc290927ff3f4b73eddab6c469e302487d1c.png)
+![picture 21](https://raw.githubusercontent.com/lirlia/medium/main/articles/202202-terraform-nodepool/images/326941769696ba33cf7dc73cffe2fc290927ff3f4b73eddab6c469e302487d1c.png)
 
 では module がどのような仕組みで動いているのかを追っていきます。
 
@@ -209,7 +209,7 @@ done
 
 ということで `terraform-google-gke-node-pool` の裏側の紹介でした！
 
-![picture 23](images/8d66f312f734cc90b7c889a25c059fbe0f0162e016439f5239f747f655115a37.png)
+![picture 23](https://raw.githubusercontent.com/lirlia/medium/main/articles/202202-terraform-nodepool/images/8d66f312f734cc90b7c889a25c059fbe0f0162e016439f5239f747f655115a37.png)
 
 GKE の NodePool の更新作業は非常に面倒なのでぜひ使って楽してみてください！
 - [lirlia/terraform-google-gke-node-pool](https://github.com/lirlia/terraform-google-gke-node-pool)

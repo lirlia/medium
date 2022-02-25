@@ -41,6 +41,8 @@ jobs:
   push-changes:
     name: push-changes
     runs-on: ubuntu-20.04
+    env:
+      ARTICLE_PATH: ${{ github.event.inputs.article_path }}
     steps:
       # https://github.com/actions/checkout/releases/tag/v2.4.0 相当
       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579

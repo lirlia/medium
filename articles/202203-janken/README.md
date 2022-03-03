@@ -10,7 +10,7 @@
 
 **動作イメージ**
 
-![picture 17](images/85eb5be2-e6fd-4e47-90b8-dfc9d3597be9.gif)
+![picture 17](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-janken//images/85eb5be2-e6fd-4e47-90b8-dfc9d3597be9.gif)
 
 **遊び方**
 
@@ -25,7 +25,7 @@
 
 ## 作ったことで得られたもの
 
-![picture 1](images/11beb0b14ffabc1db66ecfe1b18798163183d194441c842a0e963a899dd18037.png)  
+![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-janken//images/11beb0b14ffabc1db66ecfe1b18798163183d194441c842a0e963a899dd18037.png)  
 
 **じゃんけん Dapps** を通じてこんなことが学べました。
 
@@ -49,7 +49,7 @@
 
 ## 次にやりたいこと
 
-![picture 2](images/676e3d29d1973ee0783a71e881ca59a024c0c5bf7d7f032a99d3ab4bc3779954.png)  
+![picture 2](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-janken//images/676e3d29d1973ee0783a71e881ca59a024c0c5bf7d7f032a99d3ab4bc3779954.png)  
 
 一通り動いて遊べる？ものが公開できたので、次はより運用のしやすさを目指したいと思います。作りながらドキュメントなどを読んでいてピックアップしたのがこちらです。
 
@@ -61,7 +61,7 @@
 
 ## じゃんけんコードの解説
 
-![picture 4](images/0d2690b4f410c69c5ab3c001e5520e2456cf822bbbc4c61d807599bc9d1656c0.png)  
+![picture 4](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-janken//images/0d2690b4f410c69c5ab3c001e5520e2456cf822bbbc4c61d807599bc9d1656c0.png)  
 
 残りは今回のコードについて Solidity 部分を解説します。
 
@@ -196,7 +196,7 @@ Ethereum では [VRF](https://docs.chain.link/docs/get-a-random-number/) を使�
 
 ## さいごに
 
-![picture 5](images/4d07fe670d4d363596c8d2f981cf5eaaf5ea56ac9728da5bbb955ddcc0541c7e.png)  
+![picture 5](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-janken//images/4d07fe670d4d363596c8d2f981cf5eaaf5ea56ac9728da5bbb955ddcc0541c7e.png)  
 
 独自トークンを受け渡す以外は**じゃんけんを実装しただけ**なので Solidity であっても比較的受け入れやすいかなと思います。
 

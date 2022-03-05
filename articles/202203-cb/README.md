@@ -22,7 +22,7 @@ Cloud Build が Google Cloud のフルマネージドな CI/CD 環境で、裏�
 
 今回は、この **「GCE の起動時間 = プロビジョニング時間」** が前と比べてどの程度早いのか？を確認します。
 
-すでに昔の GCE にはアクセスできないため、比較対象のデータは **技術書典12の同人誌で使ったデータ(2021/12/20頃に取得)** とします。
+すでに昔の GCE にはアクセスできないため、比較対象のデータは **技術書典12の同人誌で使ったデータ(2021/12/20頃に取得)** とします。
 
 ![picture 1](images/provisioning-time.png)
 
@@ -43,7 +43,8 @@ steps:
 
 前回と同様に `echo "hello"` を実行するジョブを各マシンタイプごとに実行し、プロビジョニング時間を計測します。
 
-![picture 3](images/aff12137f49b761b27eb895cba50c262182d47e0d644a0a4c7d960b44e51c8f8.png)  
+![picture 8](images/608a231eec61812817be7ab6f93ec6aef0e97ab262bec26f64552930e7e60a51.png)  
+
 
 [REST Resource: projects.builds  |  Cloud Build Documentation  |  Google Cloud](https://cloud.google.com/build/docs/api/reference/rest/v1/projects.builds#machinetype)
 
@@ -57,9 +58,13 @@ steps:
 
 ※GCE 内にはじめから格納されているコンテナイメージも Debian ベースのものに変更されていました(`gcloud`とか)ので、**ビルドなどでコンテナイメージの固定化する必要がある場合は OS の変更に注意してください**
 
-また Google Cloud の Release Note では **「e2-highcpu-8 or e2-highcpu-32 in the default pool.」のみが Debian 11 の対象** ということでしたが、確認したところ **すべての MachineType においてバージョンが Debian 11 になっていました**。
+---
 
-![picture 3](images/aff12137f49b761b27eb895cba50c262182d47e0d644a0a4c7d960b44e51c8f8.png)  
+![picture 1](images/6aabd8a1501644d4d5aa3a93830c0c854228c26e5a974f5be5544cc7618fc295.png)  
+
+[Cloud Build release notes  |  Google Cloud](https://cloud.google.com/build/docs/release-notes)
+
+また Google Cloud の Release Note では **「e2-highcpu-8 or e2-highcpu-32 in the default pool.」のみが Debian 11 の対象** ということでしたが、確認したところ **すべての MachineType においてバージョンが Debian 11 になっていました**。
 
 →こちらは現在 (2022/03/07) Google Cloud に問い合わせ中です。
 

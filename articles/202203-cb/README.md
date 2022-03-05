@@ -2,7 +2,7 @@
 
 こんにちはミクシィの 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です。
 
-[Cloud Build の同人誌](https://speakerdeck.com/mixi_engineers/mixi-tech-note-number-07?slide=37)を出したのでそこそこ詳しくなりました。そんなCloud Build で **「プロビジョニング時間が短くなる」**という嬉しいアップデートがあったので**どれぐらい短縮されたのか**を調べてみます。
+[Cloud Build の同人誌](https://speakerdeck.com/mixi_engineers/mixi-tech-note-number-07?slide=37)を出したのでそこそこ詳しくなりました。そんなCloud Build で **<span style="color: #e04b9e">「プロビジョニング時間が短くなる」</style>** という嬉しいアップデートがあったので **<span style="color: #e04b9e">どれぐらい短縮されたのか</style>** を調べてみます。
 
 ![picture 1](images/6aabd8a1501644d4d5aa3a93830c0c854228c26e5a974f5be5544cc7618fc295.png)  
 
@@ -10,11 +10,11 @@
 
 # 最初に結論
 
-ビルドが **約30秒** 早く始まるようになりました
+ビルドが **<span style="color: #e04b9e">約30秒</style>** 早く始まるようになりました
 
-※ただしマシンタイプを指定しないビルド(`E2_MEDIUM` 利用時)は除きます。`E2_MEDIUM`は元から高速(**7秒**)にビルドが始まります。
+※ただしマシンタイプを指定しないビルド(`E2_MEDIUM` 利用時)は除きます。`E2_MEDIUM`は元から高速(**<span style="color: #e04b9e">7秒</style>**)にビルドが始まります。
 
-**目次**
+**<span style="color: #e04b9e">目次</style>**
 
 # 以前のプロビジョニング時間
 Cloud Build とは Google Cloud のフルマネージドな CI/CD サービスで、Google Compute Engine (GCE) 上で動いています。
@@ -25,9 +25,9 @@ Cloud Build とは Google Cloud のフルマネージドな CI/CD サービス�
 
 [Cloud Build Deep Dive | mixi developers | mixi developers](https://mixi-developers.mixi.co.jp/cloud-build-deep-dive-f2cd75e7ab91)
 
-今回は Cloud Build の裏側の **「GCE の起動時間 = プロビジョニング時間」** がどの程度早くなったのか？をチェックします。
+今回は Cloud Build の裏側の **<span style="color: #e04b9e">「GCE の起動時間 = プロビジョニング時間」</style>** がどの程度早くなったのか？をチェックします。
 
-すでに昔の GCE にはアクセスできないため、2021/12/20頃に取得したデータと比較します。(一番右の数字がプロビジョニング時間で `E2_MEDIUM` 以外のマシンタイプでは **70秒超** かかっています)
+すでに昔の GCE にはアクセスできないため、2021/12/20頃に取得したデータと比較します。(一番右の数字がプロビジョニング時間で `E2_MEDIUM` 以外のマシンタイプでは **<span style="color: #e04b9e">70秒超</style>** かかっています)
 
 ![picture 1](images/provisioning-time.png)
 
@@ -59,7 +59,7 @@ steps:
 
 ![picture 2](images/68a746dea4c7df1b14a3ac6e6f55bcb33f3acf27731db118d9c2bc32c9ab90c0.png)  
 
-OS は Ubuntu から Debian に変わり、`UNSPECIFIED(E2_MEDIUM)` を除く N1 / E2 系のマシンタイプでは **約30秒** ほどプロビジョニングが高速になっていました。
+OS は Ubuntu から Debian に変わり、`UNSPECIFIED(E2_MEDIUM)` を除く N1 / E2 系のマシンタイプでは **<span style="color: #e04b9e">約30秒</style>** ほどプロビジョニングが高速になっていました。
 
 ※`UNSPECIFIED(E2_MEDIUM)` は元から高速(7秒)で起動するので変化はありませんでした
 
@@ -71,7 +71,7 @@ OS は Ubuntu から Debian に変わり、`UNSPECIFIED(E2_MEDIUM)` を除く N1
 
 [Cloud Build release notes  |  Google Cloud](https://cloud.google.com/build/docs/release-notes)
 
-また Google Cloud の Release Note では **「e2-highcpu-8 or e2-highcpu-32 in the default pool.」のみが Debian 11 の対象** ということでしたが、確認したところ **すべての MachineType においてバージョンが Debian 11 になっていました**。
+また Google Cloud の Release Note では **<span style="color: #e04b9e">「e2-highcpu-8 or e2-highcpu-32 in the default pool.」のみが Debian 11 の対象</style>** ということでしたが、確認したところ **<span style="color: #e04b9e">すべての MachineType においてバージョンが Debian 11 になっていました</style>**。
 
 →こちらは現在 (2022/03/07) Google Cloud に問い合わせ中です。
 
@@ -79,11 +79,11 @@ OS は Ubuntu から Debian に変わり、`UNSPECIFIED(E2_MEDIUM)` を除く N1
 
 ![picture 5](images/5377615a41a5aa1e9df2ef8868d7f30ad93c53282bca10cdae54d890c8c03334.png)  
 
-OS が Ubuntu → Debian に変わり、高速にプロビジョニングされるようになりました (30秒の短縮)。**プロビジョニング時間は課金対象ではないので利用料金は変わりません**が、ビルドの待ち時間が減るのは嬉しいですね。
+OS が Ubuntu → Debian に変わり、高速にプロビジョニングされるようになりました (約30秒の短縮)。**<span style="color: #e04b9e">プロビジョニング時間は課金対象ではないので利用料金は変わりません</style>** が、ビルドの待ち時間が減るのは嬉しいですね。
 
 一方でローカルに保存された Docker イメージのベース OS が変わっている場合もあるので注意しましょう。
 
-Cloud Build をもっと便利に使いたい場合はこのスライドがおすすめです↓
+Cloud Build をもっと便利に使いたい場合はこのスライドを見てください！
 
 [Cloud Build を使い倒そう！ - Speaker Deck](https://speakerdeck.com/mixi_engineers/mixi-tech-note-number-07?slide=37)
 

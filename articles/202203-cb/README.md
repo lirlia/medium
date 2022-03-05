@@ -16,7 +16,7 @@
 
 **目次**
 
-# はじめに
+# 以前のプロビジョニング時間
 Cloud Build とは Google Cloud のフルマネージドな CI/CD サービスで、Google Compute Engine (GCE) 上で動いています。
 
 ![picture 4](images/87f59440833df94e2986154b95bddf04852d2310908cc45369a2239482dfdd66.png)  
@@ -35,7 +35,7 @@ Cloud Build とは Google Cloud のフルマネージドな CI/CD サービス�
 
 一体どれぐらい短縮されるのでしょうか？
 
-## 計測方法
+# プロビジョニング時間の計測方法
 
 ```yaml
 steps:
@@ -55,7 +55,7 @@ steps:
 
 [REST Resource: projects.builds  |  Cloud Build Documentation  |  Google Cloud](https://cloud.google.com/build/docs/api/reference/rest/v1/projects.builds#machinetype)
 
-# 調査の結果
+# プロビジョニング時間の計測結果
 
 ![picture 2](images/68a746dea4c7df1b14a3ac6e6f55bcb33f3acf27731db118d9c2bc32c9ab90c0.png)  
 

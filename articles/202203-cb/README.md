@@ -2,7 +2,9 @@
 
 こんにちはミクシィの 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です。
 
-[Cloud Build の同人誌](https://speakerdeck.com/mixi_engineers/mixi-tech-note-number-07?slide=37)を出したのでそこそこ詳しくなりました。そんなCloud Build で **<span style="color: #e04b9e">「プロビジョニング時間が短くなる」</span>** という嬉しいアップデートがあったので **<span style="color: #e04b9e">どれぐらい短縮されたのか</span>** を調べてみます。
+以前[Cloud Build の同人誌](https://speakerdeck.com/mixi_engineers/mixi-tech-note-number-07?slide=37)を出した時にジョブの起動時間の違いを調べました。その時は 約70秒程度 でしたが、先日 **<span style="color: #e04b9e">「プロビジョニング時間*1 が短くなる」</span>** アップデートが行われたので **<span style="color: #e04b9e">「以前と比較してどのぐらい起動時間が短縮されたのか？」</span>** を調べてみます。
+
+※1 プロビジョニング時間 とは「ビルドが始まるまでの時間」のことです
 
 ![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/6aabd8a1501644d4d5aa3a93830c0c854228c26e5a974f5be5544cc7618fc295.png)  
 
@@ -10,30 +12,31 @@
 
 # 最初に結論
 
-ビルドが **<span style="color: #e04b9e">約30秒</span>** 早く始まるようになりました
+アップデートによって「ビルド開始が **<span style="color: #e04b9e">約30秒</span>** 早くなります」
 
-※ただしマシンタイプを指定しないビルド(`E2_MEDIUM` 利用時)は除きます。`E2_MEDIUM`は元から高速(**<span style="color: #e04b9e">7秒</span>**)にビルドが始まります。
+※ただしマシンタイプを指定しないビルド(`E2_MEDIUM` 利用時)は元から高速(**<span style="color: #e04b9e">7秒</span>**)で動作するためアップデートの対象外です
 
-**<span style="color: #e04b9e">目次</span>**
+**目次**
 
 # 以前のプロビジョニング時間
-Cloud Build とは Google Cloud のフルマネージドな CI/CD サービスで、Google Compute Engine (GCE) 上で動いています。
+Cloud Build は Google Cloud のフルマネージドな CI/CD サービスで、Google Compute Engine (GCE) 上で動いています。
 
 ![picture 4](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/87f59440833df94e2986154b95bddf04852d2310908cc45369a2239482dfdd66.png)  
 
 詳しくはこの記事で解説しているのでご覧ください。
 
-[Cloud Build Deep Dive | mixi developers | mixi developers](https://mixi-developers.mixi.co.jp/cloud-build-deep-dive-f2cd75e7ab91)
+- [Cloud Build Deep Dive | mixi developers | mixi developers](https://mixi-developers.mixi.co.jp/cloud-build-deep-dive-f2cd75e7ab91)
 
-今回は Cloud Build の裏側の **<span style="color: #e04b9e">「GCE の起動時間 = プロビジョニング時間」</span>** がどの程度早くなったのか？をチェックします。
+Cloud Build の裏側で動く **<span style="color: #e04b9e">「GCE の起動時間(プロビジョニング時間)」</span>** が改善されたので「どのぐらい起動が早くなったのか？」をチェックします。
 
-すでに昔の GCE にはアクセスできないため、2021/12/20頃に取得したデータと比較します。(一番右の数字がプロビジョニング時間で `E2_MEDIUM` 以外のマシンタイプでは **<span style="color: #e04b9e">70秒超</span>** かかっています)
+すでにアップデートされていて昔の GCE にはアクセスできないので、同人誌を書いた時に取ったデータ(2021/12/20頃)と比較します。
+
+一番右の数字がプロビジョニング時間で `E2_MEDIUM` 以外のマシンタイプでは **<span style="color: #e04b9e">70秒超</span>** かかっています。
 
 ![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/provisioning-time.png)
 
 
-
-一体どれぐらい短縮されるのでしょうか？
+はたしてプロビジョニング時間はどれぐらい短縮されたでしょうか？
 
 # プロビジョニング時間の計測方法
 
@@ -46,56 +49,58 @@ steps:
       - "hello"
 ```
 
-`echo "hello"` を行うジョブでプロビジョニング時間を計測します。
+すぐに終了するジョブを動かしてみて、Cloud Build の実行時間からプロビジョニング時間を計測します。
 
-計測対象のマシンタイプ一覧はこちら↓
+※`Cloud Build の実行時間 - echo コマンド実行時間 = プロビジョニング時間`
+
+計測対象のマシンタイプは公式に書いてあるこちら↓
 
 ![picture 8](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/608a231eec61812817be7ab6f93ec6aef0e97ab262bec26f64552930e7e60a51.png)  
 
 
 [REST Resource: projects.builds  |  Cloud Build Documentation  |  Google Cloud](https://cloud.google.com/build/docs/api/reference/rest/v1/projects.builds#machinetype)
 
-# プロビジョニング時間の計測結果
+# 計測の結果
 
 ![picture 2](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/68a746dea4c7df1b14a3ac6e6f55bcb33f3acf27731db118d9c2bc32c9ab90c0.png)  
 
-OS は Ubuntu から Debian に変わり、`UNSPECIFIED(E2_MEDIUM)` を除く N1 / E2 系のマシンタイプでは **<span style="color: #e04b9e">約30秒</span>** ほどプロビジョニングが高速になっていました。
 
-※`UNSPECIFIED(E2_MEDIUM)` は元から高速(7秒)で起動するので変化はありませんでした
-
-※GCE 内に格納されているコンテナイメージ(`gcloud`等)も Debian ベースに変更されていました
+- マシンタイプに関係なく **<span style="color: #e04b9e">約30秒</span>** プロビジョニングが高速になっていました。ただし `UNSPECIFIED(E2_MEDIUM)` は元から高速(7秒)で起動するので変化はありませんでした。
+- GCE の OS は Ubuntu 18.04.1 から Debian 11 に変わり、GCE 内のコンテナイメージ(`gcloud`等)も Debian ベースに変更されていました
 
 ---
+
+ちなみに、調査で気づいたのですが Release Note では **<span style="color: #e04b9e">「e2-highcpu-8 or e2-highcpu-32 in the default pool.」のみが Debian 11 の対象</span>** でしたが、
 
 ![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/6aabd8a1501644d4d5aa3a93830c0c854228c26e5a974f5be5544cc7618fc295.png)  
 
 [Cloud Build release notes  |  Google Cloud](https://cloud.google.com/build/docs/release-notes)
 
-また Google Cloud の Release Note では **<span style="color: #e04b9e">「e2-highcpu-8 or e2-highcpu-32 in the default pool.」のみが Debian 11 の対象</span>** ということでしたが、確認したところ **<span style="color: #e04b9e">すべての MachineType においてバージョンが Debian 11 になっていました</span>**。
+実機で確認したところ **<span style="color: #e04b9e">すべての MachineType が Debian 11 になっていました。</span>**
 
 →こちらは現在 (2022/03/07) Google Cloud に問い合わせ中です。
+
 
 # まとめ
 
 ![picture 5](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/5377615a41a5aa1e9df2ef8868d7f30ad93c53282bca10cdae54d890c8c03334.png)  
 
-OS が Ubuntu → Debian に変わり、高速にプロビジョニングされるようになりました (約30秒の短縮)。**<span style="color: #e04b9e">プロビジョニング時間は課金対象ではないので利用料金は変わりません</span>** が、ビルドの待ち時間が減るのは嬉しいですね。
+CloudBuild の裏で動く GCE が Ubuntu → Debian に変わり、プロビジョニング時間が約30秒短くなりました。**<span style="color: #e04b9e">プロビジョニング時間は課金対象ではないので利用料金は変わりません</span>** が、ビルドの待ち時間が減るのは嬉しいですね。
 
-一方でローカルに保存された Docker イメージのベース OS が変わっている場合もあるので注意しましょう。
+ただし GCE の OS が変更になったことで、Cloud Build にはじめからインストールされている `gcr.io/cloud-builders/gcloud:latest` などのイメージが Debian ベースになっている点に注意してください。
 
-Cloud Build をもっと便利に使いたい場合はこのスライドを見てください！
+`gcloud` を使うだけなら問題ないですが、Debian に変更されたイメージをアプリのビルドに使っている場合は、ライブラリ(glibcなど)のバージョンが変わるかもしれません。
+
+また本文で紹介した Cloud Build の裏側や、Cloud Build をもっと便利に使いたい場合はこのスライドをご覧ください！(技術書典12の同人誌です)
 
 [Cloud Build を使い倒そう！ - Speaker Deck](https://speakerdeck.com/mixi_engineers/mixi-tech-note-number-07?slide=37)
 
----
 # おまけ
 
-ローカルに存在する(ダウンロードなしで使用できる)イメージの一覧です。
-
-※イメージをあらかじめ GCE に腹持ちさせることで、利用者が外部からイメージをダウンロードする際の高速化(重複するレイヤーをダウンロードしないようにしている)をしているとのこと
+以下は Cloud Build でダウンロードなしで使用できるイメージの一覧です。ダウンロードなしですぐにジョブを実行できるため、なるべく利用すると良いです。
 
 ```sh
-root@4e9249a3022b:/workspace# docker https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images
+root@4e9249a3022b:/workspace# docker images
 REPOSITORY                                        TAG                              IMAGE ID       CREATED         SIZE
 gcr.io/cloud-builders/kubectl                     latest                           7b8375ae6108   8 days ago      2.9GB
 gcr.io/cloud-builders/git                         latest                           49c0a32f310e   8 days ago      3.87GB

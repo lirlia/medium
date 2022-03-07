@@ -27,7 +27,7 @@ jobs:
           set -x
 
           # image url を更新
-          sed -i "s@images@https://raw.githubusercontent.com/lirlia/medium/main/${ARTICLE_PATH}/images@g" "${ARTICLE_PATH}/README.md"
+          sed -i "s@(images@(https://raw.githubusercontent.com/lirlia/medium/main/${ARTICLE_PATH}/images@g" "${ARTICLE_PATH}/README.md"
 
           opts=(
             --title="$(cat ${ARTICLE_PATH}/title)"

@@ -6,7 +6,7 @@
 
 ※1 プロビジョニング時間 とは「ビルドが始まるまでの時間」のことです
 
-![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/6aabd8a1501644d4d5aa3a93830c0c854228c26e5a974f5be5544cc7618fc295.png)  
+![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/6aabd8a1501644d4d5aa3a93830c0c854228c26e5a974f5be5544cc7618fc295.png)  
 
 [Cloud Build release notes  |  Google Cloud](https://cloud.google.com/build/docs/release-notes)
 
@@ -21,7 +21,7 @@
 # 以前のプロビジョニング時間
 Cloud Build は Google Cloud のフルマネージドな CI/CD サービスで、Google Compute Engine (GCE) 上で動いています。
 
-![picture 4](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/87f59440833df94e2986154b95bddf04852d2310908cc45369a2239482dfdd66.png)  
+![picture 4](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/87f59440833df94e2986154b95bddf04852d2310908cc45369a2239482dfdd66.png)  
 
 詳しくはこの記事で解説しているのでご覧ください。
 
@@ -33,7 +33,7 @@ Cloud Build の裏側で動く **<span style="color: #e04b9e">「GCE の起動�
 
 一番右の数字がプロビジョニング時間で `E2_MEDIUM` 以外のマシンタイプでは **<span style="color: #e04b9e">70秒超</span>** かかっています。
 
-![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/provisioning-time.png)
+![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/provisioning-time.png)
 
 
 はたしてプロビジョニング時間はどれぐらい短縮されたでしょうか？
@@ -55,14 +55,14 @@ steps:
 
 計測対象のマシンタイプは公式に書いてあるこちら↓
 
-![picture 8](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/608a231eec61812817be7ab6f93ec6aef0e97ab262bec26f64552930e7e60a51.png)  
+![picture 8](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/608a231eec61812817be7ab6f93ec6aef0e97ab262bec26f64552930e7e60a51.png)  
 
 
 [REST Resource: projects.builds  |  Cloud Build Documentation  |  Google Cloud](https://cloud.google.com/build/docs/api/reference/rest/v1/projects.builds#machinetype)
 
 # 計測の結果
 
-![picture 2](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/68a746dea4c7df1b14a3ac6e6f55bcb33f3acf27731db118d9c2bc32c9ab90c0.png)  
+![picture 2](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/68a746dea4c7df1b14a3ac6e6f55bcb33f3acf27731db118d9c2bc32c9ab90c0.png)  
 
 
 - マシンタイプに関係なく **<span style="color: #e04b9e">約30秒</span>** プロビジョニングが高速になっていました。ただし `UNSPECIFIED(E2_MEDIUM)` は元から高速(7秒)で起動するので変化はありませんでした。
@@ -72,7 +72,7 @@ steps:
 
 ちなみに、調査で気づいたのですが Release Note では **<span style="color: #e04b9e">「e2-highcpu-8 or e2-highcpu-32 in the default pool.」のみが Debian 11 の対象</span>** でしたが、
 
-![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/6aabd8a1501644d4d5aa3a93830c0c854228c26e5a974f5be5544cc7618fc295.png)  
+![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/6aabd8a1501644d4d5aa3a93830c0c854228c26e5a974f5be5544cc7618fc295.png)  
 
 [Cloud Build release notes  |  Google Cloud](https://cloud.google.com/build/docs/release-notes)
 
@@ -83,7 +83,7 @@ steps:
 
 # まとめ
 
-![picture 5](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/5377615a41a5aa1e9df2ef8868d7f30ad93c53282bca10cdae54d890c8c03334.png)  
+![picture 5](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/5377615a41a5aa1e9df2ef8868d7f30ad93c53282bca10cdae54d890c8c03334.png)  
 
 CloudBuild の裏で動く GCE が Ubuntu → Debian に変わり、プロビジョニング時間が約30秒短くなりました。**<span style="color: #e04b9e">プロビジョニング時間は課金対象ではないので利用料金は変わりません</span>** が、ビルドの待ち時間が減るのは嬉しいですね。
 
@@ -100,7 +100,7 @@ CloudBuild の裏で動く GCE が Ubuntu → Debian に変わり、プロビジ
 以下は Cloud Build でダウンロードなしで使用できるイメージの一覧です。ダウンロードなしですぐにジョブを実行できるため、なるべく利用すると良いです。
 
 ```sh
-root@4e9249a3022b:/workspace# docker images
+root@4e9249a3022b:/workspace# docker https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images
 REPOSITORY                                        TAG                              IMAGE ID       CREATED         SIZE
 gcr.io/cloud-builders/kubectl                     latest                           7b8375ae6108   8 days ago      2.9GB
 gcr.io/cloud-builders/git                         latest                           49c0a32f310e   8 days ago      3.87GB
@@ -159,7 +159,7 @@ ubuntu                                            cloudbuild_cache              
 debian                                            cloudbuild_cache                 04fbdaf87a6a   5 weeks ago     124MB
 gcr.io/gae-runtimes/java11_app_builder            argo_previous_cloudbuild_cache   a996994d0b7a   5 weeks ago     2.87GB
 gcr.io/k8s-skaffold/skaffold                      v1.35.2_cloudbuild_cache         2fac536544c7   7 weeks ago     2.42GB
-curlhttps://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/curl                                   cloudbuild_cache                 b6fbb053c3f1   8 weeks ago     8.3MB
+curlhttps://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-cb//images/curl                                   cloudbuild_cache                 b6fbb053c3f1   8 weeks ago     8.3MB
 gcr.io/gae-runtimes/base_app_builder              argo_current_cloudbuild_cache    1a66a4dcd0b7   2 months ago    2.34GB
 us.gcr.io/google-appengine/nodejs                 cloudbuild_cache                 f05d770ddf9d   3 months ago    737MB
 alpine                                            cloudbuild_cache                 c059bfaa849c   3 months ago    5.59MB

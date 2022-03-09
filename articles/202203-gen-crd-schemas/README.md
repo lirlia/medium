@@ -4,7 +4,7 @@
 
 最近は Kubernetes Manifest のスキーマチェックができる `kubeconform` の布教活動をしています！
 
-![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-gen-crd-schemas/images/8364d33afb76c18d9f79742b5e5961995349dbdf86c8d9bb27141ef0a6231287.png)  
+![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-gen-crd-schemas/https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-gen-crd-schemas/images/8364d33afb76c18d9f79742b5e5961995349dbdf86c8d9bb27141ef0a6231287.png)  
 
 - [kubeconformを使ったKubernetes Manifestの型チェックをCIに仕込んでレビューを楽にしよう!](https://mixi-developers.mixi.co.jp/kubeconform-2bb477371e06)
 - [kubeconform の asdf プラグインを作成しました](https://mixi-developers.mixi.co.jp/asdf-kubeconform-aadc6c4acbae)
@@ -144,7 +144,7 @@ GitHub Actions では以下の処理を行っています。
 
 新しい Manifest(`upstream.yaml`)を追加/修正すると、このようにスキーマが自動生成されます。
 
-![picture 2](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-gen-crd-schemas/images/3faf7bda57588330cf6197bf2a217596f0c4d381581ecd2fe7cbd88b02caf4a2.png)  
+![picture 2](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-gen-crd-schemas/https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-gen-crd-schemas/images/3faf7bda57588330cf6197bf2a217596f0c4d381581ecd2fe7cbd88b02caf4a2.png)  
 
 便利ですね！！！！
 

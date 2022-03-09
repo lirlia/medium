@@ -2,7 +2,7 @@
 
 こんにちはミクシィの 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です。
 
-以前[Cloud Build の同人誌](https://speakerdeck.com/mixi_engineers/mixi-tech-note-number-07?slide=37)を出した時にジョブの起動時間の違いを調べました。その時は 約70秒程度 でしたが、先日 **<span style="color: #e04b9e">「プロビジョニング時間*1 が短くなる」</span>** アップデートが行われたので **<span style="color: #e04b9e">「以前と比較してどのぐらい起動時間が短縮されたのか？」</span>** を調べてみます。
+以前[Cloud Build の同人誌](https://speakerdeck.com/mixi_engineers/mixi-tech-note-number-07?slide=37)を出した時にジョブの起動時間を調べました。その時は 約70秒程度 でしたが、先日 **<span style="color: #e04b9e">「プロビジョニング時間*1 が短くなる」</span>** アップデートが行われたので **<span style="color: #e04b9e">「以前と比較してどのぐらい起動時間が短縮されたのか？」</span>** を調べてみます。
 
 ※1 プロビジョニング時間 とは「ビルドが始まるまでの時間」のことです
 

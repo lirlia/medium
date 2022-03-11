@@ -4,7 +4,7 @@
 
 Argo CD が v2.3.0 がリリースされました！
 
-- [Argo CD v2.3 release candidate. The next Argo CD release is around the… | by Alexander Matyushentsev | Feb, 2022 | Argo Project](https://blog.argoproj.io/argo-cd-v2-3-release-candidate-a5b8cf11b0d3)
+- [Argo CD v2.3 release candidate.](https://blog.argoproj.io/argo-cd-v2-3-release-candidate-a5b8cf11b0d3)
 - [argo-cd/2.2-2.3.md at v2.3.0 · argoproj/argo-cd](https://github.com/argoproj/argo-cd/blob/v2.3.0/docs/operator-manual/upgrading/2.2-2.3.md)
 
 

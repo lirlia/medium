@@ -1,4 +1,4 @@
-# Argo CD 2.3.0 にアップデート時にやったことを紹介します
+# Argo CD v2.3.0 にアップデート時にやったことを紹介します
 
 こんにちは。ミクシィの 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です。
 
@@ -15,7 +15,7 @@ Argo CD が v2.3.0 がリリースされました！
 私たちがバージョンアップしたときの環境情報はこちらです。
 
 - `v2.2.3` → `v2.3.0` にアップデートした。
-- Argo CD Notifications(`v.1.1.0`) を使っている。
+- Argo CD Notifications(`v1.1.0`) を使っている。
 - `kubeconform` によるスキーマチェックをしている。
 - Helm パッケージの保存に OCI 準拠の Artifact Registry を使っている。
 
@@ -23,11 +23,11 @@ Argo CD が v2.3.0 がリリースされました！
 
 ![picture 2](images/1996107b2d0a9f111633233aacff75764d8993443417c3a2f1d2044f7ff9be07.png)  
 
-対応が必要だったアップデートを列挙します。(私たちの場合)
+対応が必要だった Argo CD v2.3.0 のアップデート内容を列挙します。(私たちの場合)
 
 - Argo CD Notifications / ApplicationSet が 1 リポジトリに集約された
-- Argo CD 内の `Kustomize` のバージョンアップ 4.2.0 → 4.4.1
-- Argo CD 内の `Helm` のバージョンアップ 3.7.1 → 3.8.0
+- Argo CD 内の `Kustomize` のバージョンアップ(`v4.2.0` → `v4.4.1`)
+- Argo CD 内の `Helm` のバージョンアップ(`v3.7.1` → `v3.8.0`)
 - 新しい Sync And Diff Strategies が登場した(`RespectIgnoreDifferences/managedFieldsManagers`)
 
 # 作業内容
@@ -162,7 +162,7 @@ Argo CD には **意図的に差分を無視する** `ignoreDifferences` とい�
 
 ※HPA を例にとりあげていますが、Argo CD 管理のパラメータを制御するアプリであればなんでも OK です
 
-HPA によって管理された `replicas` を Argo CD が更新するのを避けるため、Argo CD の[マニュアル](https://argo-cd.readthedocs.io/en/stable/user-guide/best_practices/#leaving-room-for-imperativeness)では **「`replicas` を manifest に含めないこと」** というワークアラウンドを提示しています。
+HPA によって管理された `replicas` を Argo CD が更新するのを避けるため、Argo CD の[マニュアル](https://argo-cd.readthedocs.io/en/stable/user-guide/best_practices/#leaving-room-for-imperativeness)では **「`replicas` を manifest に含めないこと」** というワークアラウンドが紹介されています。
 
 こうですね。
 
@@ -227,6 +227,8 @@ spec:
 ![picture 3](images/4d07fe670d4d363596c8d2f981cf5eaaf5ea56ac9728da5bbb955ddcc0541c7e.png)  
 
 マイナーバージョンが 1 上がっただけにしては色々変更がありますが、古いままだとセキュリティリスクもありますので頑張ってアップデートしましょう！
+
+また便利なプロダクトを作ってくれている `Argo CD Community` に感謝 🙏🙏🙏🙏🙏🙏
 
 Argo CD v2.3.0 のその他のアップデートや注意点などは公式サイトを参照してください。
 

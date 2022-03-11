@@ -21,7 +21,7 @@ Argo CD が v2.3.0 がリリースされました！
 
 # Argo CD 2.3 のアップデート内容
 
-![picture 2](images/1996107b2d0a9f111633233aacff75764d8993443417c3a2f1d2044f7ff9be07.png)  
+![picture 2](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-argocd2.3//images/1996107b2d0a9f111633233aacff75764d8993443417c3a2f1d2044f7ff9be07.png)  
 
 対応が必要だった Argo CD v2.3.0 のアップデート内容を列挙します。(私たちの場合)
 
@@ -32,7 +32,7 @@ Argo CD が v2.3.0 がリリースされました！
 
 # 作業内容
 
-![picture 1](images/11beb0b14ffabc1db66ecfe1b18798163183d194441c842a0e963a899dd18037.png)  
+![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-argocd2.3//images/11beb0b14ffabc1db66ecfe1b18798163183d194441c842a0e963a899dd18037.png)  
 
 以下の順に作業を進めました。
 
@@ -72,7 +72,7 @@ Argo CD が v2.3.0 がリリースされました！
 
 Argo CD を使っているので、対応する `Application` を削除してあとは GitOps に任せました。
 
-![picture 2](images/aa5ee8ce55b61269621e7194ff42195a7b76269e75acb8b0bf656cf5b1a57653.png)  
+![picture 2](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-argocd2.3//images/aa5ee8ce55b61269621e7194ff42195a7b76269e75acb8b0bf656cf5b1a57653.png)  
 
 ## Argo CD v2.3.0 にアップデート
 
@@ -224,7 +224,7 @@ spec:
 
 # まとめ
 
-![picture 3](images/4d07fe670d4d363596c8d2f981cf5eaaf5ea56ac9728da5bbb955ddcc0541c7e.png)  
+![picture 3](https://raw.githubusercontent.com/lirlia/medium/main/articles/202203-argocd2.3//images/4d07fe670d4d363596c8d2f981cf5eaaf5ea56ac9728da5bbb955ddcc0541c7e.png)  
 
 マイナーバージョンが 1 上がっただけにしては色々変更がありますが、古いままだとセキュリティリスクもありますので頑張ってアップデートしましょう！
 

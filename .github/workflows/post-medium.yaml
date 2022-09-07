@@ -9,7 +9,7 @@ on:
 jobs:
   post-medium:
     name: post-medium
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     container:
       image: ghcr.io/matsubara0507/mdium
     env:

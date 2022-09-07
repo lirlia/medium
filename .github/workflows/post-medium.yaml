@@ -9,7 +9,7 @@ on:
 jobs:
   post-medium:
     name: post-medium
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-18.04
     container:
       image: ghcr.io/matsubara0507/mdium
     env:
@@ -46,7 +46,7 @@ jobs:
 
   push-changes:
     name: push-changes
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-18.04
     env:
       ARTICLE_PATH: ${{ github.event.inputs.article_path }}
     steps:

@@ -9,7 +9,7 @@ on:
 jobs:
   post-medium:
     name: post-medium
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container:
       image: ghcr.io/matsubara0507/mdium
     env:
@@ -26,10 +26,10 @@ jobs:
 
           set -x
 
-          echo "deb http://dk.archive.ubuntu.com/ubuntu/ xenial main" >> /etc/apt/sources.list
-          echo "deb http://dk.archive.ubuntu.com/ubuntu/ xenial universe" >> /etc/apt/sources.list
-          apt-get update -y
-          apt-get install gcc-4.9 -y
+          # echo "deb http://dk.archive.ubuntu.com/ubuntu/ xenial main" >> /etc/apt/sources.list
+          # echo "deb http://dk.archive.ubuntu.com/ubuntu/ xenial universe" >> /etc/apt/sources.list
+          # apt-get update -y
+          # apt-get install gcc-4.9 -y
           # apt-get upgrade libstdc++6 -y
 
           # image url を更新
@@ -46,7 +46,7 @@ jobs:
 
   push-changes:
     name: push-changes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       ARTICLE_PATH: ${{ github.event.inputs.article_path }}
     steps:

@@ -26,10 +26,10 @@ jobs:
 
           set -x
 
-          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-          sudo apt-get update
-          sudo apt-get install gcc-4.9
-          sudo apt-get upgrade libstdc++6
+          add-apt-repository ppa:ubuntu-toolchain-r/test
+          apt-get update -y
+          apt-get install gcc-4.9 -y
+          apt-get upgrade libstdc++6 -y
 
           # image url を更新
           sed -i "s@(images@(https://raw.githubusercontent.com/lirlia/medium/main/${ARTICLE_PATH}/images@g" "${ARTICLE_PATH}/README.md"

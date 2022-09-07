@@ -28,7 +28,7 @@ https://youtu.be/kNGOW8RcBbA
 
 ## gRPC でのリクエスト/レスポンス
 
-![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/images/e5360d98d4d2e9bfefa4025911fd975c3cb738f489e1350d34f6a0ba4dd7e469.png)  
+![picture 1](images/e5360d98d4d2e9bfefa4025911fd975c3cb738f489e1350d34f6a0ba4dd7e469.png)  
 
 ゲームアカウント登録したり、ガチャをひいたり、アイテムを購入したりなど、
 ゲームのうち永続性を持たせたい操作を担当する機能です。
@@ -42,11 +42,11 @@ gRPC をゲームで使うのはチャレンジングな試みでしたが、Pro
 
 また永続データは Spanner に、一時データは Cloud Memory Store for Redis に格納しています。
 
-![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/images/grpc.drawio.png)  
+![picture 1](images/grpc.drawio.png)  
 
 ## マルチプレイゲーム
 
-![picture 2](https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/images/8dc8c4e26c929cda3a990f5f1d81901d535ab7b132b7b305d6a476d081df1e5a.png)  
+![picture 2](images/8dc8c4e26c929cda3a990f5f1d81901d535ab7b132b7b305d6a476d081df1e5a.png)  
 
 ストブルでは4人で同時に遊べる **マルチプレイ** を売りにしています。
 マルチプレイではサーバとの通信ではなく、ユーザー同士がパケットを交換して通信をするので専用のサーバが必要です。
@@ -59,16 +59,16 @@ gRPC をゲームで使うのはチャレンジングな試みでしたが、Pro
 
 MUN はホストOSを必要とする製品なので、コンテナではなく Compute Engine で動かしています。
 
-![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/images/multi.drawio.png)  
+![picture 1](images/multi.drawio.png)  
 
 ## ボイスチャット
 
-![picture 3](https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/images/1c9a0dcd8ebcf2c9ad9ced280d6b757ec8f27e9ee2967e2c8ae148f03f72cab1.png)  
+![picture 3](images/1c9a0dcd8ebcf2c9ad9ced280d6b757ec8f27e9ee2967e2c8ae148f03f72cab1.png)  
 
 よりマルチゲームを楽しんでもらうため、ストブルではボイスチャットを用意しています。
 こちらは弊社のスーパーエンジニアが GKE + Agones で動くボイスチャットアプリを作ってくれました！
 
-![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/images/voice.drawio.png)  
+![picture 1](images/voice.drawio.png)  
 
 詳しい構成や挙動は別の機会に紹介したいと思います。
 
@@ -80,7 +80,7 @@ MUN はホストOSを必要とする製品なので、コンテナではなく C
 
 クライアントAがマルチプレイ用のルームを立て、フレンドを招待すると **クライアントA → gRPC サーバ → Firebase Cloud Messaging(FCM) → クライアントB(フレンド)** という流れで通知が飛びます。
 
-![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/images/notification.drawio.png)  
+![picture 1](images/notification.drawio.png)  
 
 # ゲームの基盤の特性について
 
@@ -88,7 +88,7 @@ MUN はホストOSを必要とする製品なので、コンテナではなく C
 
 ## スケーラビリティ
 
-![picture 6](https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/images/cf363ac328d387c11720afe2f5946bd4f9a945a5233f87cf0418d4df587239f8.png)  
+![picture 6](images/cf363ac328d387c11720afe2f5946bd4f9a945a5233f87cf0418d4df587239f8.png)  
 
 通常の Web サービスと異なり、ゲームの基盤はトラフィックの増減が非常に激しいです。
 
@@ -102,7 +102,7 @@ MUN はホストOSを必要とする製品なので、コンテナではなく C
 
 ## セキュリティ
 
-![picture 7](https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/images/0c9a5e6af295689ae1c77426b7b1285dcd2fe0a1b70a7eba441068753a10bf22.png)  
+![picture 7](images/0c9a5e6af295689ae1c77426b7b1285dcd2fe0a1b70a7eba441068753a10bf22.png)  
 
 bot といった不正ユーザからのアクセスや攻撃も多くとんでくるので、相応のセキュリティ対策も求められます。
 実際ストブルもリリース直後に海外からの大量アクセスがとんできたので、Cloud Armor をつかって弾いたりしました。
@@ -111,7 +111,7 @@ bot といった不正ユーザからのアクセスや攻撃も多くとんで�
 
 **「ゲームをどのように改善・更新していくか？」** を判断するため、「ユーザがどのクエストを遊んだのか？」「所持しているアイテムは何か？」など遊んでいただいたユーザのログを出力し、自前のデータ基盤にためて KPI 分析を行なっています。
 
-![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/images/data.drawio.png)  
+![picture 1](images/data.drawio.png)  
 
 ## まとめ
 
@@ -124,7 +124,7 @@ bot といった不正ユーザからのアクセスや攻撃も多くとんで�
 
 これらを満たすため、ストブルでは以下の構成でサービス提供を行なっています。
 
-![picture 1](https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/https://raw.githubusercontent.com/lirlia/medium/main/articles/2022-ghost-scramble-server/images/all.drawio.png)  
+![picture 1](images/all.drawio.png)  
 
 - 言語: Go
   - ボイスチャットで Elixir / Rust

@@ -26,6 +26,11 @@ jobs:
 
           set -x
 
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install gcc-4.9
+          sudo apt-get upgrade libstdc++6
+
           # image url を更新
           sed -i "s@(images@(https://raw.githubusercontent.com/lirlia/medium/main/${ARTICLE_PATH}/images@g" "${ARTICLE_PATH}/README.md"
 
@@ -40,7 +45,7 @@ jobs:
 
   push-changes:
     name: push-changes
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     env:
       ARTICLE_PATH: ${{ github.event.inputs.article_path }}
     steps:

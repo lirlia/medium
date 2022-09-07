@@ -26,12 +26,11 @@ jobs:
 
           set -x
 
-          apt-get update -y
-          apt-get install software-properties-common -y
-          add-apt-repository ppa:ubuntu-toolchain-r/test
+          echo "deb http://dk.archive.ubuntu.com/ubuntu/ xenial main" >> /etc/apt/sources.list
+          echo "deb http://dk.archive.ubuntu.com/ubuntu/ xenial universe" >> /etc/apt/sources.list
           apt-get update -y
           apt-get install gcc-4.9 -y
-          apt-get upgrade libstdc++6 -y
+          # apt-get upgrade libstdc++6 -y
 
           # image url を更新
           sed -i "s@(images@(https://raw.githubusercontent.com/lirlia/medium/main/${ARTICLE_PATH}/images@g" "${ARTICLE_PATH}/README.md"

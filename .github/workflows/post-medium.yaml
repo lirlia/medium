@@ -26,7 +26,6 @@ jobs:
 
           set -x
 
-          add-apt-repository ppa:ubuntu-toolchain-r/test
           apt-get update -y
           apt-get install gcc-4.9 -y
           apt-get upgrade libstdc++6 -y

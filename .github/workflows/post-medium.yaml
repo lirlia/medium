@@ -1,71 +1,71 @@
-name: post-medium
-on:
-  workflow_dispatch:
-    inputs:
-      article_path:
-        description: articles/xxxxx 形式で入力してください
-        required: true
+# name: post-medium
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       article_path:
+#         description: articles/xxxxx 形式で入力してください
+#         required: true
 
-jobs:
-  post-medium:
-    name: post-medium
-    runs-on: ubuntu-18.04
-    container:
-      image: ghcr.io/matsubara0507/mdium
-    env:
-      MEDIUM_TOKEN: ${{ secrets.MEDIUM_TOKEN }}
-      PUBLICATION_ID: ${{ secrets.PUBLICATION_ID }}
-      ARTICLE_PATH: ${{ github.event.inputs.article_path }}
-      GH_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-    steps:
-      # https://github.com/actions/checkout/releases/tag/v2.4.0 相当
-      - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
-      - name: post-article
-        shell: bash
-        run: |
+# jobs:
+#   post-medium:
+#     name: post-medium
+#     runs-on: ubuntu-18.04
+#     container:
+#       image: ghcr.io/matsubara0507/mdium
+#     env:
+#       MEDIUM_TOKEN: ${{ secrets.MEDIUM_TOKEN }}
+#       PUBLICATION_ID: ${{ secrets.PUBLICATION_ID }}
+#       ARTICLE_PATH: ${{ github.event.inputs.article_path }}
+#       GH_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+#     steps:
+#       # https://github.com/actions/checkout/releases/tag/v2.4.0 相当
+#       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
+#       - name: post-article
+#         shell: bash
+#         run: |
 
-          set -x
+#           set -x
 
-          # echo "deb http://dk.archive.ubuntu.com/ubuntu/ xenial main" >> /etc/apt/sources.list
-          # echo "deb http://dk.archive.ubuntu.com/ubuntu/ xenial universe" >> /etc/apt/sources.list
-          # apt-get update -y
-          # apt-get install gcc-4.9 -y
-          # apt-get upgrade libstdc++6 -y
+#           # echo "deb http://dk.archive.ubuntu.com/ubuntu/ xenial main" >> /etc/apt/sources.list
+#           # echo "deb http://dk.archive.ubuntu.com/ubuntu/ xenial universe" >> /etc/apt/sources.list
+#           # apt-get update -y
+#           # apt-get install gcc-4.9 -y
+#           # apt-get upgrade libstdc++6 -y
 
-          # image url を更新
-          sed -i "s@(images@(https://raw.githubusercontent.com/lirlia/medium/main/${ARTICLE_PATH}/images@g" "${ARTICLE_PATH}/README.md"
+#           # image url を更新
+#           sed -i "s@(images@(https://raw.githubusercontent.com/lirlia/medium/main/${ARTICLE_PATH}/images@g" "${ARTICLE_PATH}/README.md"
 
-          opts=(
-            --title="$(cat ${ARTICLE_PATH}/title)"
-            --gist="medium-snippet-"
-            --org="$PUBLICATION_ID"
-            --verbose
-          )
-          # https://github.com/matsubara0507/mdium
-          mdium "${ARTICLE_PATH}/README.md" ${opts[@]}
+#           opts=(
+#             --title="$(cat ${ARTICLE_PATH}/title)"
+#             --gist="medium-snippet-"
+#             --org="$PUBLICATION_ID"
+#             --verbose
+#           )
+#           # https://github.com/matsubara0507/mdium
+#           mdium "${ARTICLE_PATH}/README.md" ${opts[@]}
 
-  push-changes:
-    name: push-changes
-    runs-on: ubuntu-18.04
-    env:
-      ARTICLE_PATH: ${{ github.event.inputs.article_path }}
-    steps:
-      # https://github.com/actions/checkout/releases/tag/v2.4.0 相当
-      - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
-      - name: change-url
-        shell: bash
-        run: |
+#   push-changes:
+#     name: push-changes
+#     runs-on: ubuntu-18.04
+#     env:
+#       ARTICLE_PATH: ${{ github.event.inputs.article_path }}
+#     steps:
+#       # https://github.com/actions/checkout/releases/tag/v2.4.0 相当
+#       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
+#       - name: change-url
+#         shell: bash
+#         run: |
 
-          set -x
+#           set -x
 
-          # image url を更新
-          sed -i "s@images@https://raw.githubusercontent.com/lirlia/medium/main/${ARTICLE_PATH}/images@g" "${ARTICLE_PATH}/README.md"
+#           # image url を更新
+#           sed -i "s@images@https://raw.githubusercontent.com/lirlia/medium/main/${ARTICLE_PATH}/images@g" "${ARTICLE_PATH}/README.md"
 
-      # https://github.com/EndBug/add-and-commit/releases/tag/v8.0.2
-      - uses: EndBug/add-and-commit@72e246094f1af94def5a07467cd789c503ae8be0
-        with:
-          committer_name: github-actions[bot]
-          committer_email: 41898282+github-actions[bot]@users.noreply.github.com
-          default_author: github_actor
-          message: 'chore: update image url by github action'
-          push: true
+#       # https://github.com/EndBug/add-and-commit/releases/tag/v8.0.2
+#       - uses: EndBug/add-and-commit@72e246094f1af94def5a07467cd789c503ae8be0
+#         with:
+#           committer_name: github-actions[bot]
+#           committer_email: 41898282+github-actions[bot]@users.noreply.github.com
+#           default_author: github_actor
+#           message: 'chore: update image url by github action'
+#           push: true

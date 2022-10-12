@@ -1,6 +1,6 @@
 # スマホゲームへの不正アクセスを Cloud Armor と AS番号でブロックする
 
-こんにちは。ミクシィの 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です。
+こんにちは。MIXI 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です。
 
 https://youtu.be/kNGOW8RcBbA
 

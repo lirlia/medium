@@ -1,6 +1,6 @@
 # 独自トークンを賭けてじゃんけんをするDappsを作った
 
-こんにちはミクシィの 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です。
+こんにちはMIXI 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です。
 
 今回はスマートコントラクトと Dapps の理解度を高めるために、独自トークンを賭けてじゃんけんをするアプリを作ってみましたので紹介します。
 

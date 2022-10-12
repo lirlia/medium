@@ -1,6 +1,6 @@
 # title
 
-こんにちは。ミクシィの 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です。
+こんにちは。MIXI 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です。
 
 最近は Kubernetes Manifest のスキーマチェックができる `kubeconform` の布教活動をしています！
 

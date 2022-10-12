@@ -1,6 +1,6 @@
 # GKE NodePool の変更をダウンタイム無しで行う Terraform module を作った
 
-こんにちはミクシィの 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です。
+こんにちはMIXI 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です。
 
 GKE 使ってますか？
 

@@ -1,7 +1,7 @@
 # DApps を Hardhat に移行してみた
 
 
-こんにちはミクシィの 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です。
+こんにちはMIXI 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です。
 
 今回は、先日作った TODOリストの Dapps を HardHat を使って動かしたいと思います。(最近は `Hardhat` が結構使われているよと教えてもらった)
 

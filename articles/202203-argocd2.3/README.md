@@ -1,6 +1,6 @@
 # Argo CD v2.3.0 にアップデート時にやったことを紹介します
 
-こんにちは。ミクシィの 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です。
+こんにちは。MIXI 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です。
 
 Argo CD が v2.3.0 がリリースされました！
 

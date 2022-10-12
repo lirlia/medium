@@ -1,6 +1,6 @@
 # title
 
-こんにちは。ミクシィの 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です。
+こんにちは。MIXI 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です。
 
 めっちゃ便利！と思って入れたツールがあんまり使われなかった話。
 ツール自体はめっちゃいい！

@@ -1,6 +1,6 @@
 # Solidity で TODO リストを作ってみた
 
-こんにちはミクシィの 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です
+こんにちはMIXI 開発本部 SREグループ の [riddle](https://twitter.com/riddle_tec) です
 
 今回は Solidity の理解を深めるために Ganache / Truffle / Solidity で簡単な TODO リストを実装してみました。
 

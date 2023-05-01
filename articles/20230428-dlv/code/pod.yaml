@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dlv-test
+spec:
+  initContainers:
+    - image: gcr.io/k8s-skaffold/skaffold-debug-support/go
+      imagePullPolicy: Always
+      name: install-go-debug-support
+      volumeMounts:
+        - mountPath: /dbg
+          name: debugging-support-files
+
+  volumes:
+    - emptyDir: {}
+      name: debugging-support-files
+
+  containers:
+    - name: dlv-test
+      command:
+        - /dbg/go/bin/dlv
+        - exec
+        - --headless
+        - --continue
+        - --accept-multiclient
+        - --listen=:56268
+        - --api-version=2
+        - /main
+      image: lirlia/sample-go-web:latest
+      imagePullPolicy: Always
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 56268
+          name: dlv
+          protocol: TCP
+      volumeMounts:
+        - mountPath: /dbg
+          name: debugging-support-files

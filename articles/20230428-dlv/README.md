@@ -1,8 +1,6 @@
-# title
+# dlv を利用した Kubernetes 環境でのリモートデバッグ
 
 こんにちは。MIXI 開発本部 SREグループの [riddle](https://twitter.com/riddle_tec) です。
-
-# dlv を利用した Kubernetes 環境でのリモートデバッグ
 
 この記事で紹介されているデバッグ方法が便利だなーと思っていました。
 - [Kubernetes上のGoアプリケーションにデバッガーを接続する](https://zenn.dev/castaneai/articles/debugging-go-application-on-kubernetes)
@@ -22,7 +20,10 @@
 
 ## アプリ
 
-※サンプルコードを [Kubernetes上のGoアプリケーションにデバッガーを接続する](https://zenn.dev/castaneai/articles/debugging-go-application-on-kubernetes) からお借りします
+サンプルコードを [Kubernetes上のGoアプリケーションにデバッガーを接続する](https://zenn.dev/castaneai/articles/debugging-go-application-on-kubernetes) からお借りします。
+
+なお今回のコードはここに置いています。
+- [medium/articles/20230428-dlv/code at main · lirlia/medium · GitHub](https://github.com/lirlia/medium/tree/main/articles/20230428-dlv/code)
 
 ```go
 package main
@@ -43,7 +44,7 @@ func main() {
 
 8080 で listen する web サーバーを [lirlia/sample-go-web:latest](https://hub.docker.com/repository/docker/lirlia/sample-go-web/general) でコンテナイメージにしておいたのでこれを使います。
 
-Dockerfile はこれ。
+使う Dockerfile はこれ。
 
 ```dockerfile
 FROM golang:1.19 as builder
@@ -76,7 +77,7 @@ spec:
 ```
 
 しかし今回はデバッグをしたいのでカスタマイズします。
-それがこちらです。
+それがこちら。
 
 ```yaml
 apiVersion: v1
@@ -159,6 +160,7 @@ spec:
 ## ポートフォワードをしてみる
 
 これでローカルの 56268 にポートが転送されます。
+※8080はサーバへの通信用です
 
 ```sh
 ❯ kubectl port-forward dlv-test 56268:56268 8080:8080
@@ -171,9 +173,9 @@ Forwarding from [::1]:8080 -> 8080
 
 ではデバッグをしてみましょう。
 
-## VScode でデバッグしてみる
+## VSCode でデバッグしてみる
 
-私は VScode を使っていますが、他のエディターやコマンドラインでも同様のことができると思うので「dlv 好きなツール名」で検索してください。
+私は VSCode を使っていますが、他のエディターやコマンドラインでも同様のことができると思うので「dlv 好きなツール名」で検索してください。
 
 `launch.json` を以下のように設定し、F5で実行します。
 
@@ -211,7 +213,7 @@ Forwarding from [::1]:8080 -> 8080
 ```go
 package main
 
-import (****
+import (
 	"log"
 	"net/http"
 )
@@ -231,8 +233,9 @@ func main() {
 
 ブレイクポイントを素通りしてコンソールに「hello」が表示されてしまう場合は、`launch.json` の `substitutePath` が間違っている可能性があるので見直してください。
 
-※注意点： HTTPのタイムアウトや、Context タイムアウトが設定されているとデバッグ中にキレることがありますので調整してみてください
+※注意点： HTTPのタイムアウトや、Context タイムアウトが設定されているとデバッグ中に切断されることがありますので調整してみてください
 
 ## 最後に
 
-Kubernetes 上で動く Go アプリにリモートデバッグをする方法を紹介しました。実際の環境でしか起こらないバグなどの改修に役に立つと思うので、使ってみてください！
+Kubernetes 上で動く Go アプリにリモートデバッグをする方法を紹介しました。
+実際の環境でしか起こらないバグなどの改修に役に立つと思うので、使ってみてください！

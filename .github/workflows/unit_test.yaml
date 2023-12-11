@@ -1,0 +1,21 @@
+name: unit test
+
+on:
+  workflow_call: {}
+  workflow_dispatch: {}
+
+jobs:
+  test1:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "test1"
+
+  test2:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "test2"
+
+  test3:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "test3"

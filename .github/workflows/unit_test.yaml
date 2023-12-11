@@ -6,11 +6,13 @@ on:
 
 jobs:
   test1:
+    if: failure()
     runs-on: ubuntu-latest
     steps:
       - run: echo "test1"
 
   test2:
+    if: failure()
     runs-on: ubuntu-latest
     steps:
       - run: echo "test2"

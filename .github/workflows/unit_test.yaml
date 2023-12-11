@@ -16,6 +16,7 @@ jobs:
       - run: echo "test2"
 
   test3:
+    if: failure()
     runs-on: ubuntu-latest
     steps:
-      - run: echo "test3" && exit 1
+      - run: echo "test3"

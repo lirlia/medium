@@ -18,4 +18,4 @@ jobs:
   test3:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "test3"
+      - run: echo "test3" && exit 1

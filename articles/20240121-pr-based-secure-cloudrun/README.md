@@ -2,7 +2,6 @@
 
 こんにちは。MIXI 開発本部 SREグループの [riddle](https://twitter.com/riddle_tec) です。
 
-
 以前 [Flutter on the Web と WidgetBook をGCSを使って Pull Request 単位にセキュアに公開する | MIXI DEVELOPERS](https://medium.com/mixi-developers/hosting-flutter-on-gcs-d4355d0e5612) という記事を書きましたが、今度は Cloud Run で同じことをやってみます。
 
 ## 作った全体の構成
@@ -26,16 +25,20 @@
 
 ### 1. Developer が `https://XXXXX.example.com` にアクセス
 
+![image](./invoker-1.drawio.png)
+
 GitHub Actions が A レコードを登録しているため、Developer は `https://XXXXX.example.com` にアクセスすると、LB にアクセスが行きます。このとき HTTPS 通信のため、LB で SSL Termination が行われます。
 
 Google Cloud の [Certificate Manager](https://cloud.google.com/certificate-manager/docs/overview?hl=en) を使用するとワイルドカード証明書を発行できるので、こちらを使い `*.example.com` に対して証明書を発行しています。これにより、どのようなサブドメイン(例: `https://hogehoge.example.com`)に対しても証明書の検証が行えるようになります。
 
 ### 2. Identity-Aware Proxy が Developer の認証を行う
 
+![image](./invoker-2.drawio.png)
 Identity-Aware Proxy を使うことで、Developer の認証/認可を行うことができます。そのためアクセスさせたい Developer の Google アカウントに `httpsResourceAccessor` 権限をつけておきます。
 
 ### 3. Nginx による Cloud Run へのリバースプロキシ
 
+![image](./invoker-3.drawio.png)
 Identity-Aware Proxy で認証/認可が成功すると、Nginx による Cloud Run へのリバースプロキシが行われます。このとき、Nginx は `https://XXXXX.run.app` に対してリバースプロキシを行います。ここが結構職人芸です。
 
 このようなコンフィグを書いています。
